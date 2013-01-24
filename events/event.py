@@ -8,12 +8,12 @@ class Event(object):
         self.name = name
         self._listeners = []
 
-    def add_listener(self, l):
-        self._listeners.append(l)
+    def add_listener(self, l, action):
+        self._listeners.append((l, action))
 
     def emit(self, *args, **kwargs):
-        for l in self._listeners:
+        for l, action in self._listeners:
             try:
-                l()(*args, **kwargs)
+                l(action=action)(*args, **kwargs)
             except Exception:
                 pass
