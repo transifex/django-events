@@ -3,10 +3,6 @@ from events.event import Event
 from events.utils import import_object
 
 
-# Django automatically executes the models module of each
-# installed app, so we read the settings here to ensure proper
-# initialization, without messing with the settings.
-
 def _setup_events(conf):
     """Setup the events defined in the settings."""
     events = {}
