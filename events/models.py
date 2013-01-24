@@ -1,6 +1,6 @@
-import importlib
 from django.conf import settings
 from events.event import Event
+from events.utils import import_object
 
 
 # Django automatically executes the models module of each
@@ -18,7 +18,7 @@ def _setup_events(conf):
             if ':' in listener:
                 listener, action = listener.rsplit(':')
             mod_name, obj_name = listener.rsplit('.', 1)
-            klass = getattr(importlib.import_module(mod_name), obj_name)
+            klass = import_object(mod_name, obj_name)
             events[name].add_listener(klass, action)
 
     # Add events to module scope.
