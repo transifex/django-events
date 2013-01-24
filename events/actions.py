@@ -47,12 +47,30 @@ class CeleryAction(Action):
         getattr(self, self.action).delay(*args, **kwargs)
 
 
-class ConditionalActionMixin(object):
-    """Take action only if a condition is met."""
+class LevelTriggeredAction(Action):
+    """Base class for actions triggered, when something happens."""
 
-    def __call__(self, *args, **kwargs):
-        if self.should_run(*args, **kwargs):
-            super(ConditionalActionMixin, self).__call__(*args, **kwargs)
+    _valid_actions = ['run']
+
+
+class EdgeTriggeredAction(Action):
+    """Base class for actions triggered the first time something happens."""
+
+    _valid_actions = ['up', 'down']
+
+    def _key(self, *args, **kwargs):
+        """Key to use to mark the action as run or clear the mark out."""
+        return "webhooks:"
+
+    def up(self, *args, **kwargs):
+        # Mark the action as run.
+        self._store.set(self._key(*args, **kwargs), 1)
+
+    def down(self, *args, **kwargs):
+        # Clear the mark.
+        self._store.delete(self._key(*args, **kwargs))
 
     def should_run(self, *args, **kwargs):
-        return True
+        # Run, on level changes
+        already_up = self._store.get(self._key(*args, **kwargs))
+        return not already_up if self.action == 'up' else already_up
