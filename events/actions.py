@@ -17,6 +17,8 @@ class Action(object):
 
     """
 
+    _valid_actions = ['run']
+
     def __init__(self, action):
         if action not in self._valid_actions:
             raise AttributeError("Action %s is not supported" % action)
@@ -49,8 +51,6 @@ class CeleryAction(Action):
 
 class LevelTriggeredAction(Action):
     """Base class for actions triggered, when something happens."""
-
-    _valid_actions = ['run']
 
 
 class EdgeTriggeredAction(Action):
