@@ -1,6 +1,6 @@
 import importlib
 from django.conf import settings
-from djevents.events import Event
+from events.event import Event
 
 
 # Django automatically executes the models module of each
