@@ -8,6 +8,14 @@ from events.conf import settings
 from events.utils import import_object
 
 
+_mod_name, _obj_name = settings.EVENTS_STORE_OBJECT.rsplit('.', 1)
+_obj = import_object(_mod_name, _obj_name)
+if callable(_obj):
+    _store = _obj()
+else:
+    _store = _obj
+
+
 class Action(object):
     """
     Base class of the hierarchy.
@@ -23,12 +31,6 @@ class Action(object):
         if action not in self._valid_actions:
             raise AttributeError("Action %s is not supported" % action)
         self.action = action
-        mod_name, obj_name = settings.EVENTS_STORE_OBJECT.rsplit('.', 1)
-        obj = import_object(mod_name, obj_name)
-        if callable(obj):
-            self._store = obj()
-        else:
-            self._store = obj
 
     def __call__(self, *args, **kwargs):
         if self.should_run(*args, **kwargs):
@@ -64,13 +66,13 @@ class EdgeTriggeredAction(Action):
 
     def up(self, *args, **kwargs):
         # Mark the action as run.
-        self._store.set(self._key(*args, **kwargs), 1)
+        _store.set(self._key(*args, **kwargs), 1)
 
     def down(self, *args, **kwargs):
         # Clear the mark.
-        self._store.delete(self._key(*args, **kwargs))
+        _store.delete(self._key(*args, **kwargs))
 
     def should_run(self, *args, **kwargs):
         # Run, on level changes
-        already_up = self._store.get(self._key(*args, **kwargs))
+        already_up = _store.get(self._key(*args, **kwargs))
         return not already_up if self.action == 'up' else already_up
