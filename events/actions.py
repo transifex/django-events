@@ -48,7 +48,8 @@ class CeleryAction(Action):
     """Background action through celery."""
 
     def __call__(self, *args, **kwargs):
-        getattr(self, self.action).delay(*args, **kwargs)
+        if self.should_run(*args, **kwargs):
+            getattr(self, self.action).delay(*args, **kwargs)
 
 
 class LevelTriggeredAction(Action):
