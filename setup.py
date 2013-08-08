@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="django-events",
-    version="0.1a",
+    version="0.1b",
     description="Events in django applications.",
     author="Apostolis Bessas",
     author_email="mpessas@transifex.com",
