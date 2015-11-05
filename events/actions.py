@@ -49,6 +49,8 @@ class CeleryAction(Action):
 
     def __call__(self, *args, **kwargs):
         if self.should_run(*args, **kwargs):
+            if self not in args:
+                args = (self, ) + args
             getattr(self, self.action).delay(*args, **kwargs)
 
 
