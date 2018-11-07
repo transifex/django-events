@@ -6,12 +6,10 @@ Base classes for possible actions taken on events.
 
 from __future__ import unicode_literals
 
-from django.conf import settings
+from events.conf import EVENTS_STORE_OBJECT
 from events.utils import import_object
 
-store_object_path = settings.get('EVENTS_STORE_OBJECT',
-                                 "django.core.cache.cache")
-_mod_name, _obj_name = store_object_path.rsplit('.', 1)
+_mod_name, _obj_name = EVENTS_STORE_OBJECT.rsplit('.', 1)
 _obj = import_object(_mod_name, _obj_name)
 if callable(_obj):
     _store = _obj()
