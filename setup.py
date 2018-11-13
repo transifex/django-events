@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 from setuptools import setup
 
 setup(
     name="django-events",
-    version="0.1b",
+    version="0.2",
     description="Events in django applications.",
     author="Apostolis Bessas",
     author_email="mpessas@transifex.com",
     packages=["events"],
-    install_requires=["Django", "django-appconf>=0.5"],
+    install_requires=["Django"],
 )

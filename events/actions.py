@@ -4,11 +4,12 @@
 Base classes for possible actions taken on events.
 """
 
-from events.conf import settings
+from __future__ import unicode_literals
+
+from events.conf import EVENTS_STORE_OBJECT
 from events.utils import import_object
 
-
-_mod_name, _obj_name = settings.EVENTS_STORE_OBJECT.rsplit('.', 1)
+_mod_name, _obj_name = EVENTS_STORE_OBJECT.rsplit('.', 1)
 _obj = import_object(_mod_name, _obj_name)
 if callable(_obj):
     _store = _obj()

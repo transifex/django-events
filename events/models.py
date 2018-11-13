@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+
 from django.conf import settings
 from events.event import Event
 from events.utils import import_object
@@ -6,8 +10,7 @@ from events.utils import import_object
 def _setup_events(conf):
     """Setup the events defined in the settings."""
     events = {}
-    event_names = conf.keys()
-    for name in event_names:
+    for name in conf.keys():
         events[name] = Event(name=name)
         for listener in conf[name]:
             action = 'run'
