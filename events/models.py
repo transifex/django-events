@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from events.event import Event
-from events.utils import import_object
 
 
 def _setup_events(conf):
@@ -16,9 +15,7 @@ def _setup_events(conf):
             action = 'run'
             if ':' in listener:
                 listener, action = listener.rsplit(':')
-            mod_name, obj_name = listener.rsplit('.', 1)
-            klass = import_object(mod_name, obj_name)
-            events[name].add_listener(klass, action)
+            events[name].add_listener(listener, action)
 
     # Add events to module scope.
     globals().update(events)
